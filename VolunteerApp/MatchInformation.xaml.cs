@@ -15,6 +15,14 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Streams;
+using Windows.Data.Xml.Dom;
+using System.Xml.Linq;
+using System.Text;
+
+
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -27,18 +35,70 @@ namespace VolunteerApp
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
+        private string fileName = "ms-appx:///Assets/testfile1.txt";
+       
+       
         public MatchInformation()
         {
             this.InitializeComponent();
-
+            
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
+            
+        }
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            //StorageFolder storage = ApplicationData.Current.LocalFolder;
+            //StorageFile file = await storage.GetFileAsync("ms - appx:///Assets/information.txt");
+            //String itemName = file.DisplayName;
+            try {
+                string content = await ReadFile();
+                char[] separator = { '\n' };
+                String[] splitStrings = new String[100];
+                StringBuilder theFollowWords = new StringBuilder();
+                splitStrings = content.Split(separator);
+                for (int i = 0; i < splitStrings.Length; i++)
+                {
+                    if (splitStrings[i].StartsWith("姓名"))
+                    {
+                        name.Text = splitStrings[i].Remove(0, 3);
+                    }
+                    else
+                    {
+                        theFollowWords.Append(splitStrings[i]);
+                    }
+                }
+                textBlock.Text = theFollowWords.ToString();
+                matchButton.Content = "重新配对";
+            }
+            catch
+            {
+                name.Text = "暂无信息";
+            }
+
+
+            
 
         }
 
+        public async Task<string> ReadFile()
+        {
+            string text;
+            try {
+                string fileContent;
+                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/testfile1.txt"));
+                using (StreamReader sRead = new StreamReader(await file.OpenStreamForReadAsync()))
+                    fileContent = await sRead.ReadToEndAsync();
+                    text = fileContent;
+            }
+            catch(Exception e) {
+                name.Text = "暂无信息";
+                text = "暂无信息";
+            }
+            return text;
+        }
         /// <summary>
         /// 获取与此 <see cref="Page"/> 关联的 <see cref="NavigationHelper"/>。
         /// </summary>
@@ -98,10 +158,10 @@ namespace VolunteerApp
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            this.navigationHelper.OnNavigatedTo(e);
-        }
+        //protected override void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    this.navigationHelper.OnNavigatedTo(e);
+        //}
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -109,5 +169,14 @@ namespace VolunteerApp
         }
 
         #endregion
+        
+
+        private async void button_Click(object sender, RoutedEventArgs e)
+        {
+            //ReadFile();
+            
+            //XmlDocument doc = await XmlDocument.LoadFromUriAsync(new Uri("ms-appx:///Assets/information.xml"));
+            //textBlock.Text = doc.DocumentElement.Attributes.GetNamedItem("age").NodeValue.ToString();
+        }
     }
 }

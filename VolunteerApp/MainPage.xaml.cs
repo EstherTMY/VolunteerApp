@@ -22,10 +22,13 @@ namespace VolunteerApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        MatchInformation matchInformation = new MatchInformation();
+        string content;
+        private string fileName = "testfile1.txt";
         public MainPage()
         {
             this.InitializeComponent();
-
+            
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
@@ -43,6 +46,16 @@ namespace VolunteerApp
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed 事件。
             // 如果使用由某些模板提供的 NavigationHelper，
             // 则系统会为您处理该事件。
+        }
+
+        
+
+        private async void MatchButton_Click(object sender, RoutedEventArgs e)
+        {
+        
+            
+            this.Frame.Navigate(typeof(MatchInformation));
+
         }
     }
 }
