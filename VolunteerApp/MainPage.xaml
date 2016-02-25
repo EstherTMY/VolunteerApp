@@ -12,7 +12,7 @@
         <Button x:Name="MatchButton" Content="配对信息" HorizontalAlignment="Stretch" Margin="136,126,136,0" VerticalAlignment="Top" Height="78" Click="MatchButton_Click"/>
         <Button x:Name="GradeButton" Content="学生成绩" HorizontalAlignment="Stretch" Margin="136,235,136,0" VerticalAlignment="Top" Height="78"/>
         <Button x:Name="TrainingButton" Content="训练模式" HorizontalAlignment="Stretch" Margin="136,343,136,0" VerticalAlignment="Top" Height="74"/>
-        <Button x:Name="WriteQuestionButton" Content="编写题目" HorizontalAlignment="Stretch" Margin="136,452,136,0" VerticalAlignment="Top" Height="79"/>
+        <Button x:Name="WriteQuestionButton" Content="编写题目" HorizontalAlignment="Stretch" Margin="136,452,136,0" VerticalAlignment="Top" Height="79" Click="WriteQuestionButton_Click"/>
 
     </Grid>
 </Page>

@@ -50,28 +50,36 @@ namespace VolunteerApp
         }
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            base.OnNavigatedTo(e);
             //StorageFolder storage = ApplicationData.Current.LocalFolder;
             //StorageFile file = await storage.GetFileAsync("ms - appx:///Assets/information.txt");
             //String itemName = file.DisplayName;
             try {
                 string content = await ReadFile();
-                char[] separator = { '\n' };
-                String[] splitStrings = new String[100];
-                StringBuilder theFollowWords = new StringBuilder();
-                splitStrings = content.Split(separator);
-                for (int i = 0; i < splitStrings.Length; i++)
+                if (content.Equals("暂无信息"))
                 {
-                    if (splitStrings[i].StartsWith("姓名"))
-                    {
-                        name.Text = splitStrings[i].Remove(0, 3);
-                    }
-                    else
-                    {
-                        theFollowWords.Append(splitStrings[i]);
-                    }
+                    matchButton.Content = "开始配对";
+                    textBlock.Text = content;
                 }
-                textBlock.Text = theFollowWords.ToString();
-                matchButton.Content = "重新配对";
+                else {
+                    char[] separator = { '\n' };
+                    String[] splitStrings = new String[100];
+                    StringBuilder theFollowWords = new StringBuilder();
+                    splitStrings = content.Split(separator);
+                    for (int i = 0; i < splitStrings.Length; i++)
+                    {
+                        if (splitStrings[i].StartsWith("姓名"))
+                        {
+                            name.Text = splitStrings[i].Remove(0, 3);
+                        }
+                        else
+                        {
+                            theFollowWords.Append(splitStrings[i]);
+                        }
+                    }
+                    textBlock.Text = theFollowWords.ToString();
+                    matchButton.Content = "重新配对";
+                }
             }
             catch
             {

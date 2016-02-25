@@ -50,12 +50,16 @@ namespace VolunteerApp
 
         
 
-        private async void MatchButton_Click(object sender, RoutedEventArgs e)
+        private void MatchButton_Click(object sender, RoutedEventArgs e)
         {
-        
-            
+                    
             this.Frame.Navigate(typeof(MatchInformation));
 
+        }
+
+        private void WriteQuestionButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(WriteQuestions));
         }
     }
 }
