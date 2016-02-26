@@ -61,5 +61,10 @@ namespace VolunteerApp
         {
             this.Frame.Navigate(typeof(WriteQuestions));
         }
+
+        private void GradeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(GradesInformation));
+        }
     }
 }
