@@ -121,8 +121,12 @@ namespace VolunteerApp
             this.navigationHelper.OnNavigatedTo(e);
             this.navigationHelper.OnNavigatedTo(e);
             String content = await ReadFile();
-            char[] separator = { '\n' };
+            char[] separator = { '\n'};
+            int leftSum = 0;
+            int count = 0;
             String[] splitStrings = new String[100];
+            String[] QuestionNumbers = new String[100];
+            HyperlinkButton[] questionNumber = new HyperlinkButton[QuestionNumbers.Length];
             StringBuilder theFollowWords = new StringBuilder();
             splitStrings = content.Split(separator);
             for (int i = 0; i < splitStrings.Length; i++)
@@ -133,10 +137,46 @@ namespace VolunteerApp
                 }
                 else
                 {
-                    theFollowWords.Append(splitStrings[i]);
+                    if (splitStrings[i].StartsWith("第")) {
+                        theFollowWords.Append(splitStrings[i]);
+                    }
+                    else
+                    {
+                        QuestionNumbers = splitStrings[i].Split(' ');
+                    
+                        for (int j=0;j<QuestionNumbers.Length;j++)
+                        {
+                            
+                            questionNumber[j] = new HyperlinkButton();
+                            questionNumber[j].Content = QuestionNumbers[j]+"  ";
+                            questionNumber[j].FontSize = 40;                    
+                            canvas.Children.Add(questionNumber[j]);
+                            if (j%5==0&&j!=0) {
+                                leftSum = 0;
+                                count++;
+                            }else if (j==0)
+                            {
+                                leftSum = 0;
+                            }
+                            else
+                            {
+                                leftSum = leftSum + 80;
+                            }
+                            Canvas.SetTop(questionNumber[j],count*50);
+                            Canvas.SetLeft(questionNumber[j],leftSum);
+                            questionNumber[j].Click += questionButton_Click;
+                        }
+                    }
                 }
             }
             gradeInformationBlock.Text = theFollowWords.ToString();
+            
+        }
+
+        private void questionButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Questions));
+            //throw new NotImplementedException();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
