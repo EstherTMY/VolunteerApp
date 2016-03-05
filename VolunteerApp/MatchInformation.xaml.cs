@@ -179,7 +179,7 @@ namespace VolunteerApp
         #endregion
         
 
-        private async void button_Click(object sender, RoutedEventArgs e)
+        private void button_Click(object sender, RoutedEventArgs e)
         {
             //ReadFile();
             

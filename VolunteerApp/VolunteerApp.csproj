@@ -92,11 +92,15 @@
     <Compile Include="GradesInformation.xaml.cs">
       <DependentUpon>GradesInformation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IRandomAcessStream.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MatchInformation.xaml.cs">
       <DependentUpon>MatchInformation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="previewQuestions.xaml.cs">
+      <DependentUpon>previewQuestions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questions.xaml.cs">
@@ -122,6 +126,9 @@
     <Content Include="Assets\WideLogo.scale-240.png" />
     <Content Include="Assets\information.xml" />
     <Content Include="Assets\testfile1.txt" />
+    <Content Include="local\GradeFile.txt" />
+    <Content Include="local\GradesInformation.txt" />
+    <Content Include="local\testfile1.txt" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -137,6 +144,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MatchInformation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="previewQuestions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -68,6 +68,7 @@ namespace VolunteerApp
             if (questionText.Text !="")
             {
                await WriteFile(questionText.Text);
+                this.Frame.Navigate(typeof(previewQuestions));
             }
         }
         public async Task WriteFile(string content)

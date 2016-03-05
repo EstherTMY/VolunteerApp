@@ -41,6 +41,7 @@ namespace VolunteerApp
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            textBlock.Text = e.Parameter.ToString();
         }
     }
 }

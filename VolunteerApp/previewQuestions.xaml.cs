@@ -17,7 +17,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
 using Windows.Storage;
-using System.Text;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -26,14 +25,12 @@ namespace VolunteerApp
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class GradesInformation : Page
+    public sealed partial class previewQuestions : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        String[] QuestionNumbers = new String[100];
-        HyperlinkButton[] questionNumber = new HyperlinkButton[100];
 
-        public GradesInformation()
+        public previewQuestions()
         {
             this.InitializeComponent();
 
@@ -47,15 +44,15 @@ namespace VolunteerApp
             try
             {
                 string fileContent;
-                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/GradesInformation.txt"));
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appdata:///local/test.txt"));
                 using (StreamReader sRead = new StreamReader(await file.OpenStreamForReadAsync()))
                     fileContent = await sRead.ReadToEndAsync();
                 text = fileContent;
             }
             catch (Exception e)
             {
-                name.Text = "暂无信息";
-                text = "暂无信息";
+               text = e.Message;
             }
             return text;
         }
@@ -118,74 +115,12 @@ namespace VolunteerApp
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-       
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            this.navigationHelper.OnNavigatedTo(e);
-            String content = await ReadFile();
-            char[] separator = { '\n'};
-            int leftSum = 0;
-            int count = 0;
-            String[] splitStrings = new String[100];
-            
-           
-            StringBuilder theFollowWords = new StringBuilder();
-            splitStrings = content.Split(separator);
-            for (int i = 0; i < splitStrings.Length; i++)
-            {
-                if (splitStrings[i].StartsWith("姓名"))
-                {
-                    name.Text = splitStrings[i].Remove(0, 3);
-                }
-                else
-                {
-                    if (splitStrings[i].StartsWith("第")) {
-                        theFollowWords.Append(splitStrings[i]);
-                    }
-                    else
-                    {
-                        QuestionNumbers = splitStrings[i].Split(' ');
-                    
-                        for (int j=0;j<QuestionNumbers.Length;j++)
-                        {
-                            
-                            questionNumber[j] = new HyperlinkButton();
-                            questionNumber[j].Content = QuestionNumbers[j]+"  ";
-                            questionNumber[j].FontSize = 40;                    
-                            canvas.Children.Add(questionNumber[j]);
-                            if (j%5==0&&j!=0) {
-                                leftSum = 0;
-                                count++;
-                            }else if (j==0)
-                            {
-                                leftSum = 0;
-                            }
-                            else
-                            {
-                                leftSum = leftSum + 80;
-                            }
-                            Canvas.SetTop(questionNumber[j],count*50);
-                            Canvas.SetLeft(questionNumber[j],leftSum);
-                            questionNumber[j].Click += questionButton_Click;
-                        }
-                    }
-                }
-            }
-            gradeInformationBlock.Text = theFollowWords.ToString();
-            
-        }
-       
-        private void questionButton_Click(object sender, RoutedEventArgs e)
-        {
-            for (int i=0;i<questionNumber.Length;i++) {
-                if (e.OriginalSource.Equals(questionNumber[i])) {
-                    string number = (String)questionNumber[i].Content;
-                    this.Frame.Navigate(typeof(Questions), number);
-                    //throw new NotImplementedException();
-                }
-            }
-            
+            string content = await ReadFile();
+            textBlock.Text = content;
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
