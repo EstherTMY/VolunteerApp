@@ -151,7 +151,7 @@ namespace VolunteerApp
                         {
                             
                             questionNumber[j] = new HyperlinkButton();
-                            questionNumber[j].Content = QuestionNumbers[j]+"  ";
+                            questionNumber[j].Content = QuestionNumbers[j]+"";
                             questionNumber[j].FontSize = 40;                    
                             canvas.Children.Add(questionNumber[j]);
                             if (j%5==0&&j!=0) {

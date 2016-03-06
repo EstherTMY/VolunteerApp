@@ -9,7 +9,10 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock x:Name="textBlock" Margin="0,35,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="451" FontSize="26.667"/>
+        <TextBlock x:Name="textBlock" Margin="0,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="60" FontSize="26.667"/>
+        <Image x:Name="image" Height="448" Margin="0,75,0,0" VerticalAlignment="Top"/>
+        <HyperlinkButton x:Name="similarQuestion" Content="相似的问题" HorizontalAlignment="Stretch" Margin="43,595,236,0" VerticalAlignment="Top" FontSize="24" Click="similarQuestion_Click" RenderTransformOrigin="-0.316,0.427"/>
+        <HyperlinkButton x:Name="doItAgain" Content="重做" HorizontalAlignment="Stretch" Margin="284,596,68,0" VerticalAlignment="Top" FontSize="24" RenderTransformOrigin="0.938,1.795" Click="doItAgain_Click"/>
 
     </Grid>
 </Page>
