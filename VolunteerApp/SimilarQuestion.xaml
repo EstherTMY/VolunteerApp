@@ -10,6 +10,8 @@
 
     <Grid>
         <TextBlock x:Name="textBlock" Margin="0,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="67" FontSize="26.667"/>
+        <Image x:Name="image" Height="558" Margin="-21,82,0,0" VerticalAlignment="Top"/>
+        <HyperlinkButton Content="重做" HorizontalAlignment="Stretch" Margin="169,576,171,0" VerticalAlignment="Top" Click="HyperlinkButton_Click"/>
 
     </Grid>
 </Page>

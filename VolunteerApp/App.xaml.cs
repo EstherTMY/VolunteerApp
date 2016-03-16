@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -129,6 +130,25 @@ namespace VolunteerApp
 
             // TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
+        }
+        protected async override void OnActivated(IActivatedEventArgs args)
+        {
+            var continuationEventArgs = args as IContinuationActivatedEventArgs;
+            if (continuationEventArgs != null)
+            {
+                switch (continuationEventArgs.Kind)
+                {
+                    case ActivationKind.PickFileContinuation:
+                        FileOpenPickerContinuationEventArgs arguments = continuationEventArgs as FileOpenPickerContinuationEventArgs;
+                        string passedData = (string)arguments.ContinuationData["Operation"];
+                        StorageFile file = arguments.Files.FirstOrDefault(); // your picked file
+                        ApplicationData appData = ApplicationData.Current;
+                        await file.CopyAsync(appData.LocalFolder, "imgg", NameCollisionOption.ReplaceExisting);
+                        // do what you want
+                        break;
+                        // rest of the code - other continuation, window activation etc.
+                }
+            }
         }
     }
 }

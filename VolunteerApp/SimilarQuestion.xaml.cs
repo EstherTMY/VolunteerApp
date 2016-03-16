@@ -6,12 +6,15 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using VolunteerApp.Common;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
@@ -23,6 +26,8 @@ namespace VolunteerApp
     /// </summary>
     public sealed partial class SimilarQuestion : Page
     {
+        StorageFile imgFile;
+        ApplicationData appData;
         private NavigationHelper navigationHelper;
         public SimilarQuestion()
         {
@@ -38,11 +43,33 @@ namespace VolunteerApp
         /// </summary>
         /// <param name="e">描述如何访问此页的事件数据。
         /// 此参数通常用于配置页。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
             string similarNumber = e.Parameter.ToString();
             textBlock.Text = "Similar to "+similarNumber;
+            string path = "ms-appx:///Assets/" + similarNumber + ".jpg";
+            appData = ApplicationData.Current;
+            imgFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(path));
+            //await imgFile.CopyAsync(appData.TemporaryFolder,imgFile.Name,NameCollisionOption.ReplaceExisting);
+            image.Source = new BitmapImage(new Uri("ms-appx:///Assets/SimilarQuestions/" + similarNumber + ".jpg"));
+        }
+
+        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            await imgFile.CopyAsync(appData.LocalFolder, imgFile.Name, NameCollisionOption.ReplaceExisting);
+            try
+            {
+                StorageFolder storageFloder = ApplicationData.Current.LocalFolder;
+                StorageFile file = await storageFloder.GetFileAsync(imgFile.Name);
+                await new MessageDialog("成功提交申请").ShowAsync();
+
+            }
+            catch
+            {
+                await new MessageDialog("提交申请失败").ShowAsync();
+            }
+
         }
     }
 }
