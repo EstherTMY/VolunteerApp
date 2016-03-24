@@ -29,10 +29,11 @@
 
         <!--TODO: 应将内容放入以下网格-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <Canvas x:Name="canvas" Height="412" VerticalAlignment="Top">
-                <TextBlock x:Name="textBlock" Canvas.Left="10" TextWrapping="Wrap" Text="学生姓名：" Canvas.Top="10" FontSize="26.667"/>
+            <TextBlock x:Name="textBlock" Canvas.Left="10" TextWrapping="Wrap" Text="学生姓名：" Canvas.Top="10" FontSize="26.667"/>
+            <Canvas x:Name="canvas" Height="412" VerticalAlignment="Top" Margin="0,43,0,0">
+               
             </Canvas>
-            <Button x:Name="matchButton" Content="添加学员" HorizontalAlignment="Stretch" Margin="127,407,126,0" VerticalAlignment="Top"/>
+            <Button x:Name="matchButton" Content="添加学员" HorizontalAlignment="Stretch" Margin="128,445,125,-1" VerticalAlignment="Top"/>
 
 
         </Grid>
