@@ -41,4 +41,6 @@
   <Capabilities>
     <Capability Name="internetClientServer" />
   </Capabilities>
+  
+  
 </Package>

@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-
+using Microsoft.WindowsAzure.MobileServices;
 // “空白应用程序”模板在 http://go.microsoft.com/fwlink/?LinkId=391641 上有介绍
 
 namespace VolunteerApp
@@ -131,6 +122,12 @@ namespace VolunteerApp
             // TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }
+        /***************链接azure mobie sevice*****************/
+        public static MobileServiceClient MobileService = new MobileServiceClient(
+    "https://mobileservicedigerobic.azure-mobile.cn/",
+    "ZmGnEWqLAruuBxFPuSarWJjrkWpAZj72"
+);
+        /***************处理选择照片*****************/
         protected async override void OnActivated(IActivatedEventArgs args)
         {
             var continuationEventArgs = args as IContinuationActivatedEventArgs;

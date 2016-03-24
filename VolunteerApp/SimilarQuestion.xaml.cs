@@ -29,6 +29,7 @@ namespace VolunteerApp
         StorageFile imgFile;
         ApplicationData appData;
         private NavigationHelper navigationHelper;
+        string similarNumber;
         public SimilarQuestion()
         {
             this.InitializeComponent();
@@ -46,7 +47,7 @@ namespace VolunteerApp
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            string similarNumber = e.Parameter.ToString();
+            similarNumber = e.Parameter.ToString();
             textBlock.Text = "Similar to "+similarNumber;
             string path = "ms-appx:///Assets/" + similarNumber + ".jpg";
             appData = ApplicationData.Current;
@@ -62,6 +63,9 @@ namespace VolunteerApp
             {
                 StorageFolder storageFloder = ApplicationData.Current.LocalFolder;
                 StorageFile file = await storageFloder.GetFileAsync(imgFile.Name);
+                questions similarQuestion = new questions { filename = similarNumber};
+                await App.MobileService.GetTable<questions>().InsertAsync(similarQuestion);
+
                 await new MessageDialog("成功提交申请").ShowAsync();
 
             }
@@ -73,3 +77,4 @@ namespace VolunteerApp
         }
     }
 }
+

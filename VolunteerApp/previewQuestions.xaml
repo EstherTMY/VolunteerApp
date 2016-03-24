@@ -22,15 +22,18 @@
         </Grid.RowDefinitions>
 
         <!-- 标题面板 -->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="MY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="page title" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
-        </StackPanel>
+        <StackPanel Grid.Row="0" Margin="19,0,0,0"/>
 
         <!--TODO: 应将内容放入以下网格-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="359" Width="362" FontSize="26.667"/>
-            <Image x:Name="image" Margin="0,76,0,-1"/>
+            <TextBlock x:Name="textBlock" Margin="241,41,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="306" FontSize="26.667"/>
+            <Image x:Name="image" Margin="0,0,181,331"/>
+            <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="245,0,0,0" TextWrapping="Wrap" Text="题目描述：" VerticalAlignment="Top" FontSize="21.333"/>
+            <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="22,434,0,0" TextWrapping="Wrap" Text="年级：" VerticalAlignment="Top" Height="25" Width="80" FontSize="24"/>
+            <TextBlock x:Name="textBlock3" HorizontalAlignment="Left" Margin="22,502,0,0" TextWrapping="Wrap" Text="难度：" VerticalAlignment="Top" FontSize="24"/>
+            <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="94,421,0,0" VerticalAlignment="Top" Width="221" Height="49"/>
+            <ComboBox x:Name="comboBox1" HorizontalAlignment="Left" Margin="94,489,0,0" VerticalAlignment="Top" Width="221"/>
+            <Button x:Name="button" Content="提交" HorizontalAlignment="Stretch" Margin="126,583,127,-9" VerticalAlignment="Top"/>
 
         </Grid>
     </Grid>

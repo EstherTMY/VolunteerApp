@@ -10,8 +10,8 @@
 
     <Grid Height="640" Margin="0,0.333,0,-0.333" VerticalAlignment="Top">
         <TextBox x:Name="questionText" Margin="10,111,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="223"/>
-        <TextBlock x:Name="hintText1" Margin="10,47,108,0" TextWrapping="Wrap" Text="请输入你想出的题目：" VerticalAlignment="Top" Height="35" FontSize="26.667"/>
-        <TextBlock x:Name="hintText2" HorizontalAlignment="Left" Margin="10,365,0,0" TextWrapping="Wrap" Text="或者上传题目图片：" VerticalAlignment="Top" FontSize="26.667"/>
+        <TextBlock x:Name="hintText1" Margin="10,47,108,0" TextWrapping="Wrap" Text="请输入您的题目描述：" VerticalAlignment="Top" Height="35" FontSize="26.667"/>
+        <TextBlock x:Name="hintText2" HorizontalAlignment="Left" Margin="10,365,0,0" TextWrapping="Wrap" Text="上传题目图片：" VerticalAlignment="Top" FontSize="26.667"/>
         <Button x:Name="uploadButton" Content="上传图片" HorizontalAlignment="Stretch" Margin="259,411,32,0" VerticalAlignment="Top" Click="button_Click" RenderTransformOrigin="0.546,-0.446"/>
         <Button x:Name="submitButton" Content="提交" HorizontalAlignment="Stretch" Margin="141,556,150,27" VerticalAlignment="Stretch" Click="submitButton_Click" Height="50"/>
     </Grid>

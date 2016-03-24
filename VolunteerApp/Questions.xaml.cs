@@ -29,6 +29,11 @@ namespace VolunteerApp
         string questionNumber;
         StorageFile imgFile;
         ApplicationData appData;
+        string fileName;
+        string tutorusername;
+        string qestiontype;
+        string studentid;
+
         private NavigationHelper navigationHelper;
         public Questions()
         {
@@ -47,14 +52,26 @@ namespace VolunteerApp
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            questionNumber = e.Parameter.ToString();
+            var na2 = (NavigateContext2)e.Parameter;
+            questionNumber = na2.number;
+            tutorusername = na2.tutorusername;
+            studentid = na2.studentid;
+            fileName = (await App.MobileService.GetTable<ansrecord>()
+   .Where(ansrecord => ansrecord.questionid == questionNumber)
+   .Select(ansrecord => ansrecord.filename)
+   .ToEnumerableAsync()).FirstOrDefault();
+   //         qestiontype = (await App.MobileService.GetTable<questions>()
+   //.Where(questions => questions.filename == fileName)
+   //.Select(questions => questions.type)
+   //.ToEnumerableAsync()).FirstOrDefault();
             questionNumber.TrimEnd();
             textBlock.Text = questionNumber;
-            string path = "ms-appx:///Assets/" + questionNumber + ".jpg";
+            
+            string path = "ms-appx:///Assets/pic/" + fileName + ".jpg";
             appData = ApplicationData.Current;
             imgFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(path));
             //await imgFile.CopyAsync(appData.TemporaryFolder,imgFile.Name,NameCollisionOption.ReplaceExisting);
-            image.Source = new BitmapImage(new Uri("ms-appx:///Assets/" + questionNumber + ".jpg"));
+            image.Source = new BitmapImage(new Uri("ms-appx:///Assets/pic/" + fileName + ".jpg"));
         }
 
         private void similarQuestion_Click(object sender, RoutedEventArgs e)
@@ -66,8 +83,10 @@ namespace VolunteerApp
         {
             await imgFile.CopyAsync(appData.LocalFolder, imgFile.Name, NameCollisionOption.ReplaceExisting);
             try {
-                StorageFolder storageFloder = ApplicationData.Current.LocalFolder;
-                StorageFile file = await storageFloder.GetFileAsync(imgFile.Name);
+                //StorageFolder storageFloder = ApplicationData.Current.LocalFolder;
+                //StorageFile file = await storageFloder.GetFileAsync(imgFile.Name);
+                assignquestion assignQuestion = new assignquestion { filename = fileName, tutor = tutorusername ,acceptchild = studentid};
+                await App.MobileService.GetTable<assignquestion>().InsertAsync(assignQuestion);
                 await new MessageDialog("成功提交申请").ShowAsync();
             }
             catch
@@ -78,3 +97,4 @@ namespace VolunteerApp
         }
     }
 }
+

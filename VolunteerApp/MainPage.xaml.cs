@@ -20,11 +20,13 @@ namespace VolunteerApp
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
+   
     public sealed partial class MainPage : Page
     {
         MatchInformation matchInformation = new MatchInformation();
         string content;
         private string fileName = "testfile1.txt";
+        string userName = "Esther";
         public MainPage()
         {
             this.InitializeComponent();
@@ -53,7 +55,7 @@ namespace VolunteerApp
         private void MatchButton_Click(object sender, RoutedEventArgs e)
         {
                     
-            this.Frame.Navigate(typeof(MatchInformation));
+            this.Frame.Navigate(typeof(MatchInformation),userName);
 
         }
 
@@ -62,9 +64,9 @@ namespace VolunteerApp
             this.Frame.Navigate(typeof(WriteQuestions));
         }
 
-        private void GradeButton_Click(object sender, RoutedEventArgs e)
+        private void TrainingButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(GradesInformation));
+
         }
     }
 }

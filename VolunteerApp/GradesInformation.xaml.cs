@@ -32,6 +32,10 @@ namespace VolunteerApp
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         String[] QuestionNumbers = new String[100];
         HyperlinkButton[] questionNumber = new HyperlinkButton[100];
+        List<string> questions;
+        string questionType;
+        string tutorusrname;
+        string studentid;
 
         public GradesInformation()
         {
@@ -118,75 +122,121 @@ namespace VolunteerApp
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-       
+
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            this.navigationHelper.OnNavigatedTo(e);
-            String content = await ReadFile();
-            char[] separator = { '\n'};
-            int leftSum = 0;
-            int count = 0;
-            String[] splitStrings = new String[100];
-            
-           
-            StringBuilder theFollowWords = new StringBuilder();
-            splitStrings = content.Split(separator);
-            for (int i = 0; i < splitStrings.Length; i++)
+            //this.navigationHelper.OnNavigatedTo(e);
+            //String content = await ReadFile();
+            //char[] separator = { '\n'};
+            var na = (NavigateContext)e.Parameter;
+            questionType = na.questiontype;
+            tutorusrname = na.tutorusername;
+            studentid = na.studentid;
+            name.Text = na.studentName;
+            type.Text = na.questiontype;
+            string studentId = na.studentid;
+
+            questions = await App.MobileService.GetTable<ansrecord>()
+   .Where(ansrecord => ansrecord.studentid == studentId)
+   .Select(ansrecord => ansrecord.questionid)
+   .ToListAsync();
+            List<bool> totalQuestions = await App.MobileService.GetTable<ansrecord>()
+   .Where(ansrecord => ansrecord.studentid == studentId)
+   .Select(ansrecord => ansrecord.trueorfalse)
+   .ToListAsync();
+
+            //        int leftSum = 0;
+            //        int count = 0;
+            //        //String[] splitStrings = new String[100];
+            //        ansrecord record = new ansrecord { };
+            //        List<string> result = await App.MobileService.GetTable<ansrecord>()
+            //.Where(ansrecord => ansrecord.trueorfalse == false)
+            //.Select(ansrecord => ansrecord.questionid)
+            //.ToListAsync();
+
+
+
+            //        //StringBuilder theFollowWords = new StringBuilder();
+            //        //splitStrings = content.Split(separator);
+            //        //for (int i = 0; i < splitStrings.Length; i++)
+            //        //{
+            //        //    if (splitStrings[i].StartsWith("姓名"))
+            //        //    {
+            //        //        name.Text = splitStrings[i].Remove(0, 3);
+            //        //    }
+            //        //    else
+            //        //    {
+            //        //        if (splitStrings[i].StartsWith("第")) {
+            //        //            theFollowWords.Append(splitStrings[i]);
+            //        //        }
+            //        //        else
+            //        //        {
+            //        //            QuestionNumbers = splitStrings[i].Split(' ');
+
+            for (int j = 0; j < questions.Count(); j++)
             {
-                if (splitStrings[i].StartsWith("姓名"))
-                {
-                    name.Text = splitStrings[i].Remove(0, 3);
+                questionNumber[j] = new HyperlinkButton();
+                if (totalQuestions[j] == true) {
+                    questionNumber[j].Content = "题号：" + questions[j] + "                 √";
                 }
                 else
                 {
-                    if (splitStrings[i].StartsWith("第")) {
-                        theFollowWords.Append(splitStrings[i]);
-                    }
-                    else
-                    {
-                        QuestionNumbers = splitStrings[i].Split(' ');
-                    
-                        for (int j=0;j<QuestionNumbers.Length;j++)
-                        {
-                            
-                            questionNumber[j] = new HyperlinkButton();
-                            questionNumber[j].Content = QuestionNumbers[j]+"";
-                            questionNumber[j].FontSize = 40;                    
-                            canvas.Children.Add(questionNumber[j]);
-                            if (j%5==0&&j!=0) {
-                                leftSum = 0;
-                                count++;
-                            }else if (j==0)
-                            {
-                                leftSum = 0;
-                            }
-                            else
-                            {
-                                leftSum = leftSum + 80;
-                            }
-                            Canvas.SetTop(questionNumber[j],count*50);
-                            Canvas.SetLeft(questionNumber[j],leftSum);
-                            questionNumber[j].Click += questionButton_Click;
-                        }
-                    }
+                    questionNumber[j].Content = "题号：" + questions[j] + "                 ×";
                 }
+                
+                questionNumber[j].FontSize = 40;
+                canvas.Children.Add(questionNumber[j]);
+                //if (j % 5 == 0 && j != 0)
+                //{
+                //    leftSum = 0;
+                //    count++;
+                //}
+                //else if (j == 0)
+                //{
+                //    leftSum = 0;
+                //}
+                //else
+                //{
+                //    leftSum = leftSum + 80;
+                //}
+                Canvas.SetTop(questionNumber[j], j * 70);
+                //Canvas.SetLeft(questionNumber[j], leftSum);
+                questionNumber[j].Click += questionButton_Click;
             }
-            gradeInformationBlock.Text = theFollowWords.ToString();
-            
         }
-       
+
+
         private void questionButton_Click(object sender, RoutedEventArgs e)
         {
-            for (int i=0;i<questionNumber.Length;i++) {
-                if (e.OriginalSource.Equals(questionNumber[i])) {
-                    string number = (String)questionNumber[i].Content;
-                    this.Frame.Navigate(typeof(Questions), number);
+            for (int i = 0; i < questionNumber.Length; i++)
+            {
+                if (e.OriginalSource.Equals(questionNumber[i]))
+                {
+                    string number = (String)questions[i];
+                    NavigateContext2 na2 = new NavigateContext2(number, questionType, tutorusrname,studentid);
+                    this.Frame.Navigate(typeof(Questions), na2);
                     //throw new NotImplementedException();
                 }
             }
-            
         }
+
+        //}
+        //gradeInformationBlock.Text = theFollowWords.ToString();
+
+
+
+        //private void questionButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    for (int i=0;i<questionNumber.Length;i++) {
+        //        if (e.OriginalSource.Equals(questionNumber[i])) {
+        //            string number = (String)questionNumber[i].Content;
+        //            this.Frame.Navigate(typeof(Questions), number);
+        //            //throw new NotImplementedException();
+        //        }
+        //    }
+
+        //}
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -195,4 +245,21 @@ namespace VolunteerApp
 
         #endregion
     }
+
+    public class NavigateContext2
+    {
+        public string number { get; set; }
+        public string questiontype { get; set; }
+        public string tutorusername { get; set; }
+        public string studentid { get; set; }
+        public NavigateContext2(string number, string questiontype,string tutorusername, string studentid)
+        {
+            this.number = number;
+            this.questiontype = questiontype;
+            this.tutorusername = tutorusername;
+            this.studentid = studentid;
+        }
+    }
+
 }
+

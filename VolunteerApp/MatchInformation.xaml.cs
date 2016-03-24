@@ -36,8 +36,9 @@ namespace VolunteerApp
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private string fileName = "ms-appx:///Assets/testfile1.txt";
-       
-       
+        HyperlinkButton[] students = new HyperlinkButton[100];
+        string tutorusername;
+
         public MatchInformation()
         {
             this.InitializeComponent();
@@ -53,41 +54,76 @@ namespace VolunteerApp
             this.navigationHelper.OnNavigatedTo(e);
             //StorageFolder storage = ApplicationData.Current.LocalFolder;
             //StorageFile file = await storage.GetFileAsync("ms - appx:///Assets/information.txt");
-            //String itemName = file.DisplayName;
-            try {
-                string content = await ReadFile();
-                if (content.Equals("暂无信息"))
-                {
-                    matchButton.Content = "开始配对";
-                    textBlock.Text = content;
-                }
-                else {
-                    char[] separator = { '\n' };
-                    String[] splitStrings = new String[100];
-                    StringBuilder theFollowWords = new StringBuilder();
-                    splitStrings = content.Split(separator);
-                    for (int i = 0; i < splitStrings.Length; i++)
-                    {
-                        if (splitStrings[i].StartsWith("姓名"))
-                        {
-                            name.Text = splitStrings[i].Remove(0, 3);
-                        }
-                        else
-                        {
-                            theFollowWords.Append(splitStrings[i]);
-                        }
-                    }
-                    textBlock.Text = theFollowWords.ToString();
-                    matchButton.Content = "重新配对";
-                }
-            }
-            catch
-            {
-                name.Text = "暂无信息";
-            }
-
-
             
+            children child = new children { };
+            tutorusername = e.Parameter.ToString();
+            name.Text = tutorusername;
+
+            List<string> studentsName = await App.MobileService.GetTable<corresponding>()
+   .Where(corresponding => corresponding.tutorusername == tutorusername)
+   .Select(corresponding => corresponding.studentusername)
+   .ToListAsync();
+
+            for (int i=0; i<studentsName.Count();i++)
+            {
+                students[i] = new HyperlinkButton();
+                students[i].Content = studentsName[i] + "";
+                students[i].FontSize = 40;
+                canvas.Children.Add(students[i]);
+                Canvas.SetTop(students[i],i*80);
+                students[i].Click += studensButton_Click;
+            }
+
+            //String itemName = file.DisplayName;
+            //try {
+            //    string content = await ReadFile();
+            //    if (content.Equals("暂无信息"))
+            //    {
+            //        matchButton.Content = "开始配对";
+            //        textBlock.Text = content;
+            //    }
+            //    else {
+            //        char[] separator = { '\n' };
+            //        String[] splitStrings = new String[100];
+            //        StringBuilder theFollowWords = new StringBuilder();
+            //        splitStrings = content.Split(separator);
+            //        for (int i = 0; i < splitStrings.Length; i++)
+            //        {
+            //            if (splitStrings[i].StartsWith("姓名"))
+            //            {
+            //                //name.Text = splitStrings[i].Remove(0, 3);
+            //            }
+            //            else
+            //            {
+            //                theFollowWords.Append(splitStrings[i]);
+            //            }
+            //        }
+            //        textBlock.Text = theFollowWords.ToString();
+            //        matchButton.Content = "重新配对";
+            //    }
+            //}
+            //catch
+            //{
+            //    name.Text = "暂无信息";
+            //}
+
+
+
+
+        }
+
+        private void studensButton_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < students.Length; i++)
+            {
+                if (e.OriginalSource.Equals(students[i]))
+                {
+                    string studentsName = (String)students[i].Content;
+                    NavigateContext1 na1 = new NavigateContext1(studentsName, tutorusername);
+                    this.Frame.Navigate(typeof(StudentGrade), na1);
+                    //throw new NotImplementedException();
+                }
+            }
 
         }
 
@@ -187,4 +223,15 @@ namespace VolunteerApp
             //textBlock.Text = doc.DocumentElement.Attributes.GetNamedItem("age").NodeValue.ToString();
         }
     }
+    public class NavigateContext1
+    {
+        public string childrenName { get; set; }
+        public string tutorusername { get; set; }
+        public NavigateContext1(string childrenName, string tutorusername)
+        {
+            this.childrenName = childrenName;
+            this.tutorusername = tutorusername;
+        }
+    }
 }
+

@@ -108,5 +108,7 @@ namespace VolunteerApp
                 IStorageFile file = await applicationFolder.CreateFileAsync("test.txt",CreationCollisionOption.OpenIfExists);
                 await FileIO.WriteTextAsync(file,content);
         }
+
+        
     }
 }
