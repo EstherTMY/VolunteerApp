@@ -112,6 +112,9 @@
     <Compile Include="Questions.xaml.cs">
       <DependentUpon>Questions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SelectStudents.xaml.cs">
+      <DependentUpon>SelectStudents.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SimilarQuestion.xaml.cs">
       <DependentUpon>SimilarQuestion.xaml</DependentUpon>
     </Compile>
@@ -191,6 +194,7 @@
     <Content Include="Assets\pic\Cal_29_Sol.jpg" />
     <Content Include="Assets\pic\Cal_30.jpg" />
     <Content Include="Assets\pic\Cal_30_Sol.jpg" />
+    <Content Include="Assets\pic\Cal_31.jpg" />
     <Content Include="Assets\SimilarQuestions\1.1.jpg" />
     <Content Include="Assets\SimilarQuestions\1.10.jpg" />
     <Content Include="Assets\SimilarQuestions\1.11.jpg" />
@@ -240,6 +244,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Questions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SelectStudents.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -129,83 +129,91 @@ namespace VolunteerApp
             //this.navigationHelper.OnNavigatedTo(e);
             //String content = await ReadFile();
             //char[] separator = { '\n'};
-            var na = (NavigateContext)e.Parameter;
-            questionType = na.questiontype;
-            tutorusrname = na.tutorusername;
-            studentid = na.studentid;
-            name.Text = na.studentName;
-            type.Text = na.questiontype;
-            string studentId = na.studentid;
+            try {
+                var na = (NavigateContext)e.Parameter;
+                questionType = na.questiontype;
+                tutorusrname = na.tutorusername;
+                studentid = na.studentid;
+                name.Text = na.studentName;
+                type.Text = na.questiontype;
+                string studentId = na.studentid;
 
-            questions = await App.MobileService.GetTable<ansrecord>()
-   .Where(ansrecord => ansrecord.studentid == studentId)
-   .Select(ansrecord => ansrecord.questionid)
-   .ToListAsync();
-            List<bool> totalQuestions = await App.MobileService.GetTable<ansrecord>()
-   .Where(ansrecord => ansrecord.studentid == studentId)
-   .Select(ansrecord => ansrecord.trueorfalse)
-   .ToListAsync();
+                questions = await App.MobileService.GetTable<ansrecord>()
+       .Where(ansrecord => ansrecord.studentid == studentId)
+       .Select(ansrecord => ansrecord.questionid)
+       .ToListAsync();
+                List<bool> totalQuestions = await App.MobileService.GetTable<ansrecord>()
+       .Where(ansrecord => ansrecord.studentid == studentId)
+       .Select(ansrecord => ansrecord.trueorfalse)
+       .ToListAsync();
 
-            //        int leftSum = 0;
-            //        int count = 0;
-            //        //String[] splitStrings = new String[100];
-            //        ansrecord record = new ansrecord { };
-            //        List<string> result = await App.MobileService.GetTable<ansrecord>()
-            //.Where(ansrecord => ansrecord.trueorfalse == false)
-            //.Select(ansrecord => ansrecord.questionid)
-            //.ToListAsync();
+                //        int leftSum = 0;
+                //        int count = 0;
+                //        //String[] splitStrings = new String[100];
+                //        ansrecord record = new ansrecord { };
+                //        List<string> result = await App.MobileService.GetTable<ansrecord>()
+                //.Where(ansrecord => ansrecord.trueorfalse == false)
+                //.Select(ansrecord => ansrecord.questionid)
+                //.ToListAsync();
 
 
 
-            //        //StringBuilder theFollowWords = new StringBuilder();
-            //        //splitStrings = content.Split(separator);
-            //        //for (int i = 0; i < splitStrings.Length; i++)
-            //        //{
-            //        //    if (splitStrings[i].StartsWith("姓名"))
-            //        //    {
-            //        //        name.Text = splitStrings[i].Remove(0, 3);
-            //        //    }
-            //        //    else
-            //        //    {
-            //        //        if (splitStrings[i].StartsWith("第")) {
-            //        //            theFollowWords.Append(splitStrings[i]);
-            //        //        }
-            //        //        else
-            //        //        {
-            //        //            QuestionNumbers = splitStrings[i].Split(' ');
+                //        //StringBuilder theFollowWords = new StringBuilder();
+                //        //splitStrings = content.Split(separator);
+                //        //for (int i = 0; i < splitStrings.Length; i++)
+                //        //{
+                //        //    if (splitStrings[i].StartsWith("姓名"))
+                //        //    {
+                //        //        name.Text = splitStrings[i].Remove(0, 3);
+                //        //    }
+                //        //    else
+                //        //    {
+                //        //        if (splitStrings[i].StartsWith("第")) {
+                //        //            theFollowWords.Append(splitStrings[i]);
+                //        //        }
+                //        //        else
+                //        //        {
+                //        //            QuestionNumbers = splitStrings[i].Split(' ');
 
-            for (int j = 0; j < questions.Count(); j++)
-            {
-                questionNumber[j] = new HyperlinkButton();
-                if (totalQuestions[j] == true) {
-                    questionNumber[j].Content = "题号：" + questions[j] + "\t\t√";
-                }
-                else
+                for (int j = 0; j < questions.Count(); j++)
                 {
-                    questionNumber[j].Content = "题号：" + questions[j] + "\t\t×";
+                    questionNumber[j] = new HyperlinkButton();
+                    if (totalQuestions[j] == true) {
+                        questionNumber[j].Content = "题号：" + questions[j] + "\t\t√";
+                    }
+                    else
+                    {
+                        questionNumber[j].Content = "题号：" + questions[j] + "\t\t×";
+                    }
+
+                    questionNumber[j].FontSize = 40;
+                    canvas.Children.Add(questionNumber[j]);
+                    //if (j % 5 == 0 && j != 0)
+                    //{
+                    //    leftSum = 0;
+                    //    count++;
+                    //}
+                    //else if (j == 0)
+                    //{
+                    //    leftSum = 0;
+                    //}
+                    //else
+                    //{
+                    //    leftSum = leftSum + 80;
+                    //}
+                    if (j > 5) {
+                        canvas.Height = 428 + 70 * (j - 5);
+                    }
+                    Canvas.SetTop(questionNumber[j], j * 70);
+                    //Canvas.SetLeft(questionNumber[j], leftSum);
+                    questionNumber[j].Click += questionButton_Click;
                 }
-                
-                questionNumber[j].FontSize = 40;
-                canvas.Children.Add(questionNumber[j]);
-                //if (j % 5 == 0 && j != 0)
-                //{
-                //    leftSum = 0;
-                //    count++;
-                //}
-                //else if (j == 0)
-                //{
-                //    leftSum = 0;
-                //}
-                //else
-                //{
-                //    leftSum = leftSum + 80;
-                //}
-                if (j>5) {
-                    canvas.Height = 428 + 70 * (j - 5);
-                }
-                Canvas.SetTop(questionNumber[j], j * 70);
-                //Canvas.SetLeft(questionNumber[j], leftSum);
-                questionNumber[j].Click += questionButton_Click;
+            }
+            catch
+            {
+                TextBlock wrongText = new TextBlock();
+                wrongText.Text = "无法获取信息";
+                canvas.Children.Add(wrongText);
             }
         }
 

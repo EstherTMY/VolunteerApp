@@ -23,17 +23,15 @@ namespace VolunteerApp
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class StudentGrade : Page
+    public sealed partial class SelectStudents : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        string studentID;
-
-        string studentname;
-        
+        HyperlinkButton[] students = new HyperlinkButton[100];
         string tutorusername;
-
-        public StudentGrade()
+        List<string> mystudentsName;
+        List<string> studentsName;
+        public SelectStudents()
         {
             this.InitializeComponent();
 
@@ -103,60 +101,50 @@ namespace VolunteerApp
         /// 无法取消导航请求的事件处理程序。</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            
             this.navigationHelper.OnNavigatedTo(e);
-            try {
-                int totalQuestionNumber = 0;
-                int rightQuestionNumber = 0;
-                int wrongQuestionNumber = 0;
-                var na1 = (NavigateContext1)e.Parameter;
-                studentname = na1.childrenName;
-                studentName.Text = na1.childrenName;
-                tutorusername = na1.tutorusername;
-                studentID = (await App.MobileService.GetTable<children>()
-       .Where(children => children.username == studentname)
-       .Select(children => children.Id)
-       .ToEnumerableAsync()).FirstOrDefault();
-                List<bool> totalQuestions = await App.MobileService.GetTable<ansrecord>()
-       .Where(ansrecord => ansrecord.studentid == studentID)
-       .Select(ansrecord => ansrecord.trueorfalse)
+            tutorusername = e.Parameter.ToString();
+            studentsName = await App.MobileService.GetTable<corresponding>()
+       .Where(corresponding => corresponding.tutorusername!=tutorusername|| corresponding.tutorusername==null)
+       .Select(corresponding => corresponding.studentusername)
        .ToListAsync();
-                totalQuestionNumber = totalQuestions.Count();
-
-                for (int i = 0; i < totalQuestionNumber; i++)
+            mystudentsName = await App.MobileService.GetTable<corresponding>()
+       .Where(corresponding => corresponding.tutorusername == tutorusername|| corresponding.tutorusername != null)
+       .Select(corresponding => corresponding.studentusername)
+       .ToListAsync();
+            List<string> newStudents = new List<string>();
+            for (int i=0;i < studentsName.Count() ;i++)
+            {
+                for (int j=0;j<mystudentsName.Count();j++)
                 {
-                    if (totalQuestions[i] == true)
+                    if (studentsName[i]== mystudentsName[j])
                     {
-                        rightQuestionNumber++;
-                    }
-                    else
-                    {
-                        wrongQuestionNumber++;
+                        studentsName.Remove(studentsName[i]);
                     }
                 }
-                double accuracy = (rightQuestionNumber * 100 / totalQuestionNumber);
-                HyperlinkButton mentalArithmetic = new HyperlinkButton();
-                mentalArithmetic.FontSize = 40;
-                //mentalArithmetic.TextWrapping = "Wrap";
-                mentalArithmetic.Content = "口算题目—\n已经做过：" + totalQuestionNumber + "道,\n" + "正确率：" + accuracy + "%";
-                canvas.Children.Add(mentalArithmetic);
-                Grid.SetRow(mentalArithmetic, 1);
-                mentalArithmetic.Click += textButton_Click;
             }
-            catch
+            for (int i = 0; i < studentsName.Count(); i++)
             {
-                TextBlock textWrong = new TextBlock();
-                textWrong.Text = "未做过题目";
-                textWrong.FontSize = 40;
-                canvas.Children.Add(textWrong);
+                students[i] = new HyperlinkButton();
+                students[i].Content = studentsName[i] + "";
+                students[i].FontSize = 40;
+                canvas.Children.Add(students[i]);
+                Canvas.SetTop(students[i], i * 80);
+                students[i].Click += studensButton_Click;
             }
         }
 
-        private void textButton_Click(object sender, RoutedEventArgs e)
+        private async void studensButton_Click(object sender, RoutedEventArgs e)
         {
-            string questionType = "口算题目";
-            NavigateContext na = new NavigateContext(studentID, questionType,studentname,tutorusername);
-            
-            this.Frame.Navigate(typeof(GradesInformation), na);
+            for (int i = 0; i < students.Length; i++)
+            {
+                if (e.OriginalSource.Equals(students[i]))
+                {
+                    corresponding newCorresponding = new corresponding() { tutorusername = tutorusername,studentusername= studentsName[i] };
+                    await App.MobileService.GetTable<corresponding>().InsertAsync(newCorresponding);
+                }
+            }
+           
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -166,19 +154,4 @@ namespace VolunteerApp
 
         #endregion
     }
-    public class NavigateContext
-    {
-        public string studentid { get; set; }
-        public string questiontype { get; set; }
-        public string studentName { get; set; }
-        public string tutorusername { get; set; }
-        public NavigateContext(string studentid, string questiontype, string studentName,string tutorusername)
-        {
-            this.questiontype = questiontype;
-            this.studentid = studentid;
-            this.studentName = studentName;
-            this.tutorusername = tutorusername;
-        }
-    }
 }
-

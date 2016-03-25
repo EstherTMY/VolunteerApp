@@ -52,31 +52,40 @@ namespace VolunteerApp
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            var na2 = (NavigateContext2)e.Parameter;
-            questionNumber = na2.number;
-            tutorusername = na2.tutorusername;
-            studentid = na2.studentid;
-            fileName = (await App.MobileService.GetTable<ansrecord>()
-   .Where(ansrecord => ansrecord.questionid == questionNumber)
-   .Select(ansrecord => ansrecord.filename)
-   .ToEnumerableAsync()).FirstOrDefault();
-   //         qestiontype = (await App.MobileService.GetTable<questions>()
-   //.Where(questions => questions.filename == fileName)
-   //.Select(questions => questions.type)
-   //.ToEnumerableAsync()).FirstOrDefault();
-            questionNumber.TrimEnd();
-            textBlock.Text = questionNumber;
-            
-            string path = "ms-appx:///Assets/pic/" + fileName + ".jpg";
-            appData = ApplicationData.Current;
-            imgFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(path));
-            //await imgFile.CopyAsync(appData.TemporaryFolder,imgFile.Name,NameCollisionOption.ReplaceExisting);
-            image.Source = new BitmapImage(new Uri("ms-appx:///Assets/pic/" + fileName + ".jpg"));
+            try {
+                var na2 = (NavigateContext2)e.Parameter;
+                questionNumber = na2.number;
+                tutorusername = na2.tutorusername;
+                studentid = na2.studentid;
+                qestiontype = na2.questiontype;
+                fileName = (await App.MobileService.GetTable<ansrecord>()
+       .Where(ansrecord => ansrecord.questionid == questionNumber)
+       .Select(ansrecord => ansrecord.filename)
+       .ToEnumerableAsync()).FirstOrDefault();
+                //         qestiontype = (await App.MobileService.GetTable<questions>()
+                //.Where(questions => questions.filename == fileName)
+                //.Select(questions => questions.type)
+                //.ToEnumerableAsync()).FirstOrDefault();
+                questionNumber.TrimEnd();
+                textBlock.Text = questionNumber;
+
+                string path = "ms-appx:///Assets/pic/" + fileName + ".jpg";
+                appData = ApplicationData.Current;
+                imgFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(path));
+                //await imgFile.CopyAsync(appData.TemporaryFolder,imgFile.Name,NameCollisionOption.ReplaceExisting);
+                image.Source = new BitmapImage(new Uri("ms-appx:///Assets/pic/" + fileName + ".jpg"));
+            }
+            catch
+            {
+                textBlock.Text = "无法获取信息";
+
+            }
         }
 
         private void similarQuestion_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(SimilarQuestion),questionNumber);
+            NavigateContext3 na3 = new NavigateContext3(fileName, qestiontype, tutorusername,studentid);
+            this.Frame.Navigate(typeof(SimilarQuestion),na3);
         }
 
         private async void doItAgain_Click(object sender, RoutedEventArgs e)
@@ -94,6 +103,20 @@ namespace VolunteerApp
                 await new MessageDialog("提交申请失败").ShowAsync();
             }
             
+        }
+    }
+    public class NavigateContext3
+    {
+        public string number { get; set; }
+        public string questiontype { get; set; }
+        public string tutorusername { get; set; }
+        public string studentid { get; set; }
+        public NavigateContext3(string number, string questiontype, string tutorusername, string studentid)
+        {
+            this.number = number;
+            this.questiontype = questiontype;
+            this.tutorusername = tutorusername;
+            this.studentid = studentid;
         }
     }
 }

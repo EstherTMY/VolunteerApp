@@ -30,6 +30,10 @@ namespace VolunteerApp
         ApplicationData appData;
         private NavigationHelper navigationHelper;
         string similarNumber;
+        string tutorusername;
+        string studentid;
+        string questiontype;
+
         public SimilarQuestion()
         {
             this.InitializeComponent();
@@ -47,13 +51,17 @@ namespace VolunteerApp
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            similarNumber = e.Parameter.ToString();
+            var na3 = (NavigateContext3)e.Parameter;
+            tutorusername = na3.tutorusername;
+            studentid = na3.studentid;
+            questiontype = na3.questiontype;
+            similarNumber = "Cal_31";
             textBlock.Text = "Similar to "+similarNumber;
-            string path = "ms-appx:///Assets/" + similarNumber + ".jpg";
+            string path = "ms-appx:///Assets/pic/" + similarNumber + ".jpg";
             appData = ApplicationData.Current;
             imgFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri(path));
             //await imgFile.CopyAsync(appData.TemporaryFolder,imgFile.Name,NameCollisionOption.ReplaceExisting);
-            image.Source = new BitmapImage(new Uri("ms-appx:///Assets/SimilarQuestions/" + similarNumber + ".jpg"));
+            image.Source = new BitmapImage(new Uri("ms-appx:///Assets/pic/" + similarNumber + ".jpg"));
         }
 
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
@@ -61,13 +69,11 @@ namespace VolunteerApp
             await imgFile.CopyAsync(appData.LocalFolder, imgFile.Name, NameCollisionOption.ReplaceExisting);
             try
             {
-                StorageFolder storageFloder = ApplicationData.Current.LocalFolder;
-                StorageFile file = await storageFloder.GetFileAsync(imgFile.Name);
-                questions similarQuestion = new questions { filename = similarNumber};
-                await App.MobileService.GetTable<questions>().InsertAsync(similarQuestion);
-
+                //StorageFolder storageFloder = ApplicationData.Current.LocalFolder;
+                //StorageFile file = await storageFloder.GetFileAsync(imgFile.Name);
+                assignquestion assignQuestion = new assignquestion { filename = similarNumber, tutor = tutorusername, acceptchild = studentid };
+                await App.MobileService.GetTable<assignquestion>().InsertAsync(assignQuestion);
                 await new MessageDialog("成功提交申请").ShowAsync();
-
             }
             catch
             {
@@ -76,5 +82,6 @@ namespace VolunteerApp
 
         }
     }
+    
 }
 
