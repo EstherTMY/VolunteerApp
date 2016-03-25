@@ -178,11 +178,11 @@ namespace VolunteerApp
             {
                 questionNumber[j] = new HyperlinkButton();
                 if (totalQuestions[j] == true) {
-                    questionNumber[j].Content = "题号：" + questions[j] + "                 √";
+                    questionNumber[j].Content = "题号：" + questions[j] + "\t\t√";
                 }
                 else
                 {
-                    questionNumber[j].Content = "题号：" + questions[j] + "                 ×";
+                    questionNumber[j].Content = "题号：" + questions[j] + "\t\t×";
                 }
                 
                 questionNumber[j].FontSize = 40;
@@ -200,6 +200,9 @@ namespace VolunteerApp
                 //{
                 //    leftSum = leftSum + 80;
                 //}
+                if (j>5) {
+                    canvas.Height = 428 + 70 * (j - 5);
+                }
                 Canvas.SetTop(questionNumber[j], j * 70);
                 //Canvas.SetLeft(questionNumber[j], leftSum);
                 questionNumber[j].Click += questionButton_Click;

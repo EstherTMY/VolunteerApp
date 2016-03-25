@@ -34,13 +34,9 @@
             	<Run Text="所有"/>
             	<Run Text="题目："/>
             </TextBlock>
-
-            <Canvas x:Name="canvas" Margin="0,52,0,0">
-                <ScrollViewer Height="450" Width="362">
-                    
-                </ScrollViewer>
-            </Canvas>
-           
+            <ScrollViewer x:Name="ScrollViewer" Height="428" VerticalAlignment="Top" Margin="0,65,-19,0" IsDoubleTapEnabled="False" IsRightTapEnabled="False" IsHoldingEnabled="False" >
+                <Canvas x:Name="canvas" Height="428" Width="381"/>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Page>

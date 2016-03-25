@@ -120,6 +120,7 @@ namespace VolunteerApp
    .Select(ansrecord => ansrecord.trueorfalse)
    .ToListAsync();
             totalQuestionNumber = totalQuestions.Count();
+            
             for (int i=0;i< totalQuestionNumber; i++)
             {
                 if (totalQuestions[i] == true)
@@ -131,7 +132,7 @@ namespace VolunteerApp
                     wrongQuestionNumber++;
                 }
             }
-            double accuracy = (rightQuestionNumber / totalQuestionNumber)*100;
+            double accuracy = (rightQuestionNumber * 100 / totalQuestionNumber);
             HyperlinkButton mentalArithmetic = new HyperlinkButton();
             mentalArithmetic.FontSize = 40;
             //mentalArithmetic.TextWrapping = "Wrap";
