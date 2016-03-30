@@ -42,4 +42,10 @@ namespace VolunteerApp
         public string uploader { get; set; }
         public string type { get; set; }
     }
+    public class volunteers
+    {
+        public string Id { get; set; }
+        public string username { get; set; }
+        public string passwd { get; set; }
+    }
 }

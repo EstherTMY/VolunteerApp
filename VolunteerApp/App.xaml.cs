@@ -81,20 +81,28 @@ namespace VolunteerApp
                 }
 
                 rootFrame.ContentTransitions = null;
-                rootFrame.Navigated += this.RootFrame_FirstNavigated;
+                //rootFrame.Navigated += this.RootFrame_FirstNavigated;
+                rootFrame.Navigate(typeof(login), e.Arguments);
+                
+
+
 
                 // 当导航堆栈尚未还原时，导航到第一页，
                 // 并通过将所需信息作为导航参数传入来配置
                 // 新页面
-                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
+
             }
 
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
         }
+
+        private void RootFrame_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+  
+        }
+
+
 
         /// <summary>
         /// 启动应用程序后还原内容转换。
