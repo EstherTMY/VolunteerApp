@@ -114,6 +114,10 @@ namespace VolunteerApp
            .ToEnumerableAsync()).FirstOrDefault();
                     passwordBox.Password = passwd;
                 }
+                else
+                {
+                    usernameBox.Text = "";
+                }
             }
             catch
             {
@@ -184,12 +188,13 @@ namespace VolunteerApp
        .Select(volunteers => volunteers.passwd)
        .ToEnumerableAsync()).FirstOrDefault();
                 if (passwd==passwordBox.Password) {
+                    await WriteFile(usernameRead);
                     this.Frame.Navigate(typeof(MainPage), usernameRead);
+                   
                 }
                 else
                 {
                     await new MessageDialog("用户名或密码错误").ShowAsync();
-
                 }
             }
             catch

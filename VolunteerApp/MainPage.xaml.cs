@@ -50,7 +50,7 @@ namespace VolunteerApp
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed 事件。
             // 如果使用由某些模板提供的 NavigationHelper，
             // 则系统会为您处理该事件。
-            userName = await ReadFile();
+            userName = e.Parameter.ToString();
         }
         public async Task<string> ReadFile()
         {
