@@ -104,13 +104,16 @@ namespace VolunteerApp
             this.navigationHelper.OnNavigatedTo(e);
             try
             {
-                usernameSave = await ReadFile();
-                usernameBox.Text = usernameSave;
-                string passwd = (await App.MobileService.GetTable<volunteers>()
-       .Where(volunteers => volunteers.username == usernameSave)
-       .Select(volunteers => volunteers.passwd)
-       .ToEnumerableAsync()).FirstOrDefault();
-                passwordBox.Password = passwd;
+                if (await ReadFile() != null)
+                {
+                    usernameSave = await ReadFile();
+                    usernameBox.Text = usernameSave;
+                    string passwd = (await App.MobileService.GetTable<volunteers>()
+           .Where(volunteers => volunteers.username == usernameSave)
+           .Select(volunteers => volunteers.passwd)
+           .ToEnumerableAsync()).FirstOrDefault();
+                    passwordBox.Password = passwd;
+                }
             }
             catch
             {
@@ -175,8 +178,19 @@ namespace VolunteerApp
 
             try {
 
-                string usernameRead = await ReadFile();
-                this.Frame.Navigate(typeof(MainPage), usernameRead);
+                string usernameRead = usernameBox.Text;
+                string passwd = (await App.MobileService.GetTable<volunteers>()
+       .Where(volunteers => volunteers.username == usernameRead)
+       .Select(volunteers => volunteers.passwd)
+       .ToEnumerableAsync()).FirstOrDefault();
+                if (passwd==passwordBox.Password) {
+                    this.Frame.Navigate(typeof(MainPage), usernameRead);
+                }
+                else
+                {
+                    await new MessageDialog("用户名或密码错误").ShowAsync();
+
+                }
             }
             catch
             {
